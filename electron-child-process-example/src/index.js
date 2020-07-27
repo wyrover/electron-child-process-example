@@ -125,6 +125,33 @@ async function test_eval() {
 
 }
 
+
+async function test_child_process_ready() {
+
+  const sourceToEval = `
+  process.on('uncaughtException', function (err) {
+   
+  });
+
+  process.on('message', function (msg) {    
+    console.log(msg);
+  });
+
+  process.send('ready');
+  `
+
+
+
+  const child = child_process.fork('--eval', [sourceToEval])
+  child.on('message', (msg) => {
+    console.log(msg)
+  })
+}
+
+
+
+
+
 // https://github.com/mslipper/electron-child-process-playground
 ;(async () => {
   console.log('11111111111111')
@@ -136,4 +163,5 @@ async function test_eval() {
   test_child_process_exec()
   test_child_process_fork()
   test_eval()
+  test_child_process_ready()
 })()
